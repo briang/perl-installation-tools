@@ -1,0 +1,30 @@
+#!/bin/bash
+
+BASE="/home/cpan"
+PERL_SOURCES="$BASE/perl-source"
+INSTALLED_PERL_DIR="$PERLBREW_ROOT/perls"
+SUFFIX='.tar.gz'
+PERLBREW_OPTS="--noman -j3"
+GITIFIER="$PERLBREW_ROOT/git"
+CCS="gcc-9 clang-9" # gcc-8 clang-8 gcc-7 gcc-6 clang-7 clang-6.0"
+
+PERLS=$(ls -1 $PERL_SOURCES | grep '^perl-5' | sed -e"s/$SUFFIX\$//")
+
+[[ -f "$GITIFIER" ]] && rm $GITIFIER
+
+cd $PERLBREW_ROOT
+for P in $PERLS ; do
+    LOG="build.$P.log"
+    DEST_DIR="$INSTALLED_PERL_DIR/$P"
+    for CC in $CCS ; do
+        if [[ ! -d "$DEST_DIR" ]] ; then
+            cmd="perlbrew install $PERLBREW_OPTS -Dcc=$CC $PERL_SOURCES/$P$SUFFIX"
+            echo "==>$cmd"
+            $cmd
+            if [[ -d "$DEST_DIR" ]] ; then
+                mv "$PERLBREW_ROOT/$LOG" "$DEST_DIR/$LOG-$CC"
+                echo "git add $DEST_DIR && git commit -m 'add $P ($CC)'" >> "$GITIFIER"
+            fi
+        fi
+    done
+done
