@@ -50,6 +50,6 @@ File | Description
 -|-
 fix-gdbm_file.pl | Repack perl sources with updated ```GDBM_File```.
 GDBM\_File | Replacement ```GDBM_File``` from perl-5.32.0.
-installer | Obsolete
 install-perls | Attempt to install multiple perls with multiple compilers.
+obsolete/ | Folder containing old scripts
 README | This!
