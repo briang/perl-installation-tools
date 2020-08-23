@@ -22,7 +22,7 @@ TODO
 
 ### Result matrix
 
-Perl | Compiler | Needs new GD_File?
+Perl | Compiler | Needs new GDBM_File?
 -|-|-
 5.6.2  | _failed_ |
 5.8.9  | clang |
@@ -48,8 +48,8 @@ Using clang-10.0.0 and gcc-10.0.1
 
 File | Description
 -|-
-fix-gdfile.pl | Repack perl sources with updated ```ext/GD_File```.
-GD_File-5.32.0.tar.gz | Replacement ```ext/GD_File``` from perl-5.32.0.
+fix-gdbm_file.pl | Repack perl sources with updated ```GDBM_File```.
+GDBM\_File | Replacement ```GDBM_File``` from perl-5.32.0.
 installer | Obsolete
 install-perls | Attempt to install multiple perls with multiple compilers.
 README | This!
