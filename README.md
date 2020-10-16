@@ -1,6 +1,7 @@
 # Perl Installation Tools
 
-A set of tools to help with installing perl, particularly old perls
+A set of (half-baked) tools to help with installing perl, particularly
+old perls
 
 ## Purpose
 
@@ -51,5 +52,6 @@ File | Description
 fix-gdbm_file.pl | Repack perl sources with updated ```GDBM_File```.
 GDBM\_File | Replacement ```GDBM_File``` from perl-5.32.0.
 install-perls | Attempt to install multiple perls with multiple compilers.
+perlarch.pl | perl script to install arch variants (longdouble, quadmath, threaded etc)
 obsolete/ | Folder containing old scripts
 README | This!
