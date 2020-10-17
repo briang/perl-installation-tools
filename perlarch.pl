@@ -2,22 +2,11 @@
 
 #:TAGS:
 
-use 5.030;
+use 5.010;
 
-use strict;  use warnings;  use autodie qw/:all/;
-use experimental qw(signatures);
+use strict;  use warnings;
 
-# use Capture::Tiny;
 use Data::Dump;
-# use List::AllUtils;
-# use Mom;
-# use Moo;
-# use Object::Pad
-# use Path::Tiny;
-# use re q(/axms);
-# use Time::Piece;
-# use Try::Tiny;
-# use Util::H2O;
 ################################################################################
 my $OTHER_PERLBREW_OPTIONS = '-j 5';
 my $PERL_SOURCE            = "/home/cpan/perl-source";
