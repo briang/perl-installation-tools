@@ -9,15 +9,19 @@ use strict;  use warnings;
 use Data::Dump;
 ################################################################################
 my $OTHER_PERLBREW_OPTIONS = '-j 5';
-my $PERL_SOURCE            = "/home/cpan/perl-source";
-my $PERLS                  = "/home/cpan/perlbrew/perls";
-
-my $perl = 'perl-5.32.0';
+my $PERLBREW_PERLS         = "/home/cpan/perlbrew/perls";
+my $USAGE                  = "usage: perl perlarch.pl <path-to-perl-tarball>";
 
 main();
 exit;
 
 sub main {
+    die "$USAGE\n" unless @ARGV and -f $ARGV[0];
+
+    my $perl = my $perl_tar_gz = shift @ARGV;
+    $perl =~ s{.*/}{};
+    $perl =~ s{\.tar.gz$}{};
+
     for my $p ('', '-Dusequadmath', '--ld') {
         for my $q ('', '--threaded') {
             my $name = my $options = join ' ', grep { length } $p, $q, '--noman';
@@ -31,12 +35,11 @@ sub main {
             }
 
             $name = join '-', $perl, ($name || ());
-            next if -d "$PERLS/$name";
+            next if -d "$PERLBREW_PERLS/$name";
 
-            my $perl_tar_gz = "$perl.tar.gz";
             my @perlbrew = split ' ', join ' ',
               "perlbrew install $OTHER_PERLBREW_OPTIONS",
-              "$PERL_SOURCE/$perl_tar_gz --as $name $options";
+              "$perl_tar_gz --as $name $options";
             say "-->@perlbrew";
             system(@perlbrew) == 0 or die $!;
         }
