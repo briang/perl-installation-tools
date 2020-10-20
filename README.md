@@ -43,7 +43,8 @@ Perl | Compiler | Needs new GDBM_File?
 5.30.3 | gcc |
 5.32.0 | gcc |
 
-Using clang-10.0.0 and gcc-10.0.1
+Compiled using clang-10.0.0 and gcc-10.0.1 on an Ubuntu 20.04
+VirtualBox VM (6GB RAM, 4 CPUs) running on Windows 10.
 
 ## Catalog of contents
 
