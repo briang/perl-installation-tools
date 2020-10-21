@@ -23,12 +23,12 @@ sub main {
     $perl =~ s{\.tar.gz$}{};
 
     for my $p ('', '-Dusequadmath', '--ld') {
-        for my $q ('', '--threaded') {
+        for my $q ('', '--thread') {
             my $name = my $options = join ' ', grep { length } $p, $q, '--noman';
             for ($name) {
                 s/-Dusequadmath/qm/;
                 s/--ld/ld/;
-                s/--threaded/th/;
+                s/--thread/th/;
                 s/--noman//;
                 s/ /-/g;
                 s/-$//;
