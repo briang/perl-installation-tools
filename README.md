@@ -52,6 +52,7 @@ File | Description
 -|-
 fix-gdbm_file.pl | Repack perl sources with updated ```GDBM_File```.
 GDBM\_File | Replacement ```GDBM_File``` from perl-5.32.0.
+install-dists.sh | install dists from file into many perls
 install-perls | Attempt to install multiple perls with multiple compilers.
 perlarch.pl | perl script to install arch variants (longdouble, quadmath, threaded etc)
 obsolete/ | Folder containing old scripts
