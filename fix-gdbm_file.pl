@@ -2,7 +2,6 @@
 
 use strict;
 use warnings;
-use autodie qw/:all/;
 
 for (glob "perl-5.*") {
     next unless -f;
@@ -17,8 +16,8 @@ for (glob "perl-5.*") {
     system_(qw(tar), $tar_flags, $_, $folder);
 }
 
-sub system_(@args) {
-    say "@args";
-    system(@args); # autodie ftw
+sub system_ {
+    print "@_\n";
+    system(@_) == 0 or die "system() failed: $?";
     return 0;
 }
