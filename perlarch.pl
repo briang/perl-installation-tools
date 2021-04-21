@@ -10,19 +10,45 @@ use Data::Dump;
 ################################################################################
 my $OTHER_PERLBREW_OPTIONS = '-j 5';
 my $PERLBREW_PERLS         = "/home/cpan/perlbrew/perls";
-my $USAGE                  = "usage: perl perlarch.pl <path-to-perl-tarball>";
+my $USAGE                  = "./perlarch.pl  [--noqm]  <path-to-perl-tarball>";
 
 main();
 exit;
 
+sub usage {
+    print STDERR "$USAGE\n";
+    exit 1 if shift;
+}
+
 sub main {
-    die "$USAGE\n" unless @ARGV and -f $ARGV[0];
+    my %OPTIONS = map {$_=>0} qw(noqm);
+    for (@ARGV) {
+        my ($opt) = /^--(.+?)\b/;
+        next unless $opt;
+
+        usage(1) unless exists $OPTIONS{$opt};
+
+        if ($opt eq 'noqm') {
+            $OPTIONS{$opt} = 1;
+        }
+    }
+
+    @ARGV = grep { ! /^--/ } @ARGV;
+
+    usage(1) unless @ARGV == 1 and -f $ARGV[0];
 
     my $perl = my $perl_tar_gz = shift @ARGV;
     $perl =~ s{.*/}{};
     $perl =~ s{\.tar.gz$}{};
 
+    my ($perl_version) = $perl =~ /([\d.]+)/;
+    $OPTIONS{noqm} = 1 if $perl_version lt '5.22';
+
     for my $p ('', '-Dusequadmath', '--ld') {
+        if ($OPTIONS{noqm}) {
+            next if $p =~ /quad/;
+        }
+
         for my $q ('', '--thread') {
             my $name = my $options = join ' ', grep { length } $p, $q, '--noman';
             for ($name) {
