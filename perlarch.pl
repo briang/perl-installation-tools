@@ -15,16 +15,6 @@ my $USAGE                  = "./perlarch.pl  [--noqm]  <path-to-perl-tarball>";
 main();
 exit;
 
-sub usage {
-    print STDERR "$USAGE\n";
-    exit 1 if shift;
-}
-
-sub minutes_seconds {
-    my $seconds = shift;
-    sprintf "%dm%d", $seconds / 60, $seconds % 60;
-}
-
 sub main {
     my %OPTIONS = map {$_=>0} qw(noqm);
     for (@ARGV) {
@@ -83,4 +73,14 @@ sub main {
               minutes_seconds($t - $build_start_time), minutes_seconds($t - $job_start_time);
         }
     }
+}
+
+sub usage {
+    print STDERR "$USAGE\n";
+    exit 1 if shift;
+}
+
+sub minutes_seconds {
+    my $seconds = shift;
+    sprintf "%dm%d", $seconds / 60, $seconds % 60;
 }
