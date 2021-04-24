@@ -80,7 +80,7 @@ sub main {
 
             my $t = time;
             printf "\nTime: this build=%s;  total job=%s\n\n",
-              minutes_seconds($build_start_time - $t), minutes_seconds($job_start_time - $t);
+              minutes_seconds($t - $build_start_time), minutes_seconds($t - $job_start_time);
         }
     }
 }
