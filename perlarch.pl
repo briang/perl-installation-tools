@@ -20,6 +20,11 @@ sub usage {
     exit 1 if shift;
 }
 
+sub minutes_seconds {
+    my $seconds = shift;
+    sprintf "%dm%d", $seconds / 60, $seconds % 60;
+}
+
 sub main {
     my %OPTIONS = map {$_=>0} qw(noqm);
     for (@ARGV) {
@@ -44,7 +49,11 @@ sub main {
     my ($perl_version) = $perl =~ /([\d.]+)/;
     $OPTIONS{noqm} = 1 if $perl_version lt '5.22';
 
+    my $job_start_time = time;
+
     for my $p ('', '-Dusequadmath', '--ld') {
+        my $build_start_time = time;
+
         if ($OPTIONS{noqm}) {
             next if $p =~ /quad/;
         }
@@ -68,6 +77,10 @@ sub main {
               "$perl_tar_gz --as $name $options";
             say "-->@perlbrew";
             system(@perlbrew) == 0 or die $!;
+
+            my $t = time;
+            printf "Time: this build=%s;  total job=%s\n",
+              minutes_seconds($build_start_time - $t), minutes_seconds($job_start_time - $t);
         }
     }
 }
