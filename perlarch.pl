@@ -9,7 +9,7 @@ use strict;  use warnings;
 use Data::Dump;
 ################################################################################
 my $OTHER_PERLBREW_OPTIONS = '-j 5'; # -Dcc=gcc-10
-my $PERLBREW_PERLS         = "/home/cpan/perlbrew/perls";
+my $PERLBREW_PERLS         = glob "~/perlbrew/perls";
 my $USAGE                  = "./perlarch.pl  [--noqm]  <path-to-perl-tarball>";
 
 main();
