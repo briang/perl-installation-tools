@@ -14,6 +14,7 @@ for (glob "perl-5.*") {
     system_(qw(rm -rf), "$folder/ext/GD_File");
     system_(qw(cp -a GDBM_File), "$folder/ext");
     system_(qw(tar), $tar_flags, $_, $folder);
+    system_(qw(rm -rf), $folder);
 }
 
 sub system_ {
