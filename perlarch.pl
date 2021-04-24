@@ -79,7 +79,7 @@ sub main {
             system(@perlbrew) == 0 or die $!;
 
             my $t = time;
-            printf "Time: this build=%s;  total job=%s\n",
+            printf "\nTime: this build=%s;  total job=%s\n\n",
               minutes_seconds($build_start_time - $t), minutes_seconds($job_start_time - $t);
         }
     }
