@@ -20,6 +20,8 @@ sub main {
     die "No tarball given\n" unless @ARGV == 1;
     die "File not found\n" unless -f $ARGV[0];
 
+    die "perlbrew home ($PERLBREW_ROOT) not found" unless -d $PERLBREW_ROOT;
+
     my $perl = my $perl_tar_gz = shift @ARGV;
     $perl =~ s{.*/}{};
     $perl =~ s{\.tar.gz$}{};
