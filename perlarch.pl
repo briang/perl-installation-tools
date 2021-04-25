@@ -56,7 +56,8 @@ sub main {
               "$perl_tar_gz --as $name $options",
               $option->cc ? '-Dcc=' . $option->cc : ();
             say "-->@perlbrew";
-            system(@perlbrew) == 0 or die $!;
+            system(@perlbrew) == 0 or die $!
+              unless $option->simulate;
 
             my $t = time;
             printf "\nTime: this build=%s;  total job=%s\n\n",
@@ -75,11 +76,12 @@ sub parse_options {
 
     my ($option, $usage) = describe_options(
         "$COMMAND  %o  path-to-perl-source-tarball",
-        [ 'cc=s'      => 'CYO compiler!' ],
-        [ 'jobs|j=i'  => 'Number of jobs', { default => 5 } ],
-        [ 'noqm'      => 'Skip quadmath builds' ],
+        [ 'cc=s'       => 'CYO compiler!' ],
+        [ 'jobs|j=i'   => 'Number of jobs', { default => 5 } ],
+        [ 'noqm'       => 'Skip quadmath builds' ],
+        [ 'simulate|S' => 'Simulate actions only' ],
         [],
-        [ 'help|h'    => 'Display this help message and exit' ],
+        [ 'help|h'     => 'Display this help message and exit' ],
 
         { getopt_conf => [ # some of these are already default
             "gnu_compat",       # C<--opt=> sets empty string
