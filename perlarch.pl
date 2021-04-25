@@ -8,45 +8,30 @@ use strict;  use warnings;
 
 use Data::Dump;
 ################################################################################
-my $OTHER_PERLBREW_OPTIONS = '-j 5'; # -Dcc=gcc-10
-my $PERLBREW_PERLS         = glob "~/perlbrew/perls";
-my $USAGE                  = "./perlarch.pl  [--noqm]  <path-to-perl-tarball>";
+use Getopt::Long::Descriptive;
+
 
 main();
 exit;
 
 sub main {
-    my %OPTIONS = map {$_=>0} qw(noqm);
-    for (@ARGV) {
-        my ($opt) = /^--(.+?)\b/;
-        next unless $opt;
-
-        usage(1) unless exists $OPTIONS{$opt};
-
-        if ($opt eq 'noqm') {
-            $OPTIONS{$opt} = 1;
-        }
-    }
-
-    @ARGV = grep { ! /^--/ } @ARGV;
-
-    usage(1) unless @ARGV == 1 and -f $ARGV[0];
+    my ($option, $usage) = parse_options();
+    die "No tarball given\n" unless @ARGV == 1;
+    die "File not found\n" unless -f $ARGV[0];
 
     my $perl = my $perl_tar_gz = shift @ARGV;
     $perl =~ s{.*/}{};
     $perl =~ s{\.tar.gz$}{};
 
     my ($perl_version) = $perl =~ /([\d.]+)/;
-    $OPTIONS{noqm} = 1 if $perl_version lt '5.22' || $perl_version eq '5.28.3';
+    $option->noqm = 1 if $perl_version lt '5.22' || $perl_version eq '5.28.3';
 
     my $job_start_time = time;
 
     for my $p ('', '-Dusequadmath', '--ld') {
         my $build_start_time = time;
 
-        if ($OPTIONS{noqm}) {
-            next if $p =~ /quad/;
-        }
+        next if $p =~ /quad/ && $option->noqm;
 
         for my $q ('', '--thread') {
             my $name = my $options = join ' ', grep { length } $p, $q, '--noman';
@@ -63,8 +48,9 @@ sub main {
             next if -d "$PERLBREW_PERLS/$name";
 
             my @perlbrew = split ' ', join ' ',
-              "perlbrew install $OTHER_PERLBREW_OPTIONS",
-              "$perl_tar_gz --as $name $options";
+              "perlbrew install", $option->{jobs},
+              "$perl_tar_gz --as $name $options",
+              $option->cc ? "-Dcc=$option->cc" : ();
             say "-->@perlbrew";
             system(@perlbrew) == 0 or die $!;
 
@@ -75,12 +61,32 @@ sub main {
     }
 }
 
-sub usage {
-    print STDERR "$USAGE\n";
-    exit 1 if shift;
-}
-
 sub minutes_seconds {
     my $seconds = shift;
     sprintf "%dm%d", $seconds / 60, $seconds % 60;
+}
+
+sub parse_options {
+    my $COMMAND = Getopt::Long::Descriptive::prog_name();
+
+    my ($option, $usage) = describe_options(
+        "$COMMAND  %o  path-to-perl-source-tarball",
+        [ 'cc=s'      => 'CYO compiler!' ],
+        [ 'jobs|j=i'  => 'Number of jobs', { default => 5 } ],
+        [ 'noqm'      => 'Skip quadmath builds' ],
+        [],
+        [ 'help|h'    => 'Display this help message and exit' ],
+
+        { getopt_conf => [ # some of these are already default
+            "gnu_compat",       # C<--opt=> sets empty string
+            "no_auto_abbrev",   # disallow abbreviated long options
+            "no_getopt_compat", # disallow C<+> for specifying options
+            "no_ignore_case",   # case is important
+            "permute",          # options can appear anywhere
+            "bundling" ] }      # C<-ab> is equivalent to C<-a -b> (THIS MUST BE LAST)
+    );
+
+    print($usage) and exit if $option->help;
+
+    return ($option, $usage);
 }
