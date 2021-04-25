@@ -10,7 +10,7 @@ use Data::Dump;
 ################################################################################
 use Getopt::Long::Descriptive;
 
-my $PERLBREW_ROOT = $ENV{PERBREW_ROOT};
+my $PERLBREW_ROOT = $ENV{PERLBREW_ROOT};
 
 main();
 exit;
