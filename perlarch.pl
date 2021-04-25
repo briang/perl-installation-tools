@@ -51,9 +51,10 @@ sub main {
             next if -d "$PERLBREW_ROOT/perls/$name";
 
             my @perlbrew = split ' ', join ' ',
-              "perlbrew install", $option->{jobs},
+              "perlbrew install",
+              "-j", $option->{jobs},
               "$perl_tar_gz --as $name $options",
-              $option->cc ? "-Dcc=$option->cc" : ();
+              $option->cc ? '-Dcc=' . $option->cc : ();
             say "-->@perlbrew";
             system(@perlbrew) == 0 or die $!;
 
