@@ -10,6 +10,7 @@ use Data::Dump;
 ################################################################################
 use Getopt::Long::Descriptive;
 
+my $PERLBREW_ROOT = $ENV{PERBREW_ROOT};
 
 main();
 exit;
@@ -45,7 +46,7 @@ sub main {
             }
 
             $name = join '-', $perl, ($name || ());
-            next if -d "$PERLBREW_PERLS/$name";
+            next if -d "$PERLBREW_ROOT/perls/$name";
 
             my @perlbrew = split ' ', join ' ',
               "perlbrew install", $option->{jobs},
