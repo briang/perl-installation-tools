@@ -27,14 +27,14 @@ sub main {
     $perl =~ s{\.tar.gz$}{};
 
     my ($perl_version) = $perl =~ /([\d.]+)/;
-    $option->noqm = 1 if $perl_version lt '5.22' || $perl_version eq '5.28.3';
+    my $option_noqm = $perl_version lt '5.22' || $perl_version eq '5.28.3';
 
     my $job_start_time = time;
 
     for my $p ('', '-Dusequadmath', '--ld') {
         my $build_start_time = time;
 
-        next if $p =~ /quad/ && $option->noqm;
+        next if $p =~ /quad/ && $option_noqm;
 
         for my $q ('', '--thread') {
             my $name = my $options = join ' ', grep { length } $p, $q, '--noman';
