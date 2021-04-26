@@ -32,11 +32,10 @@ sub main {
     my $job_start_time = time;
 
     for my $p ('', '-Dusequadmath', '--ld') {
-        my $build_start_time = time;
-
         next if $p =~ /quad/ && $option_noqm;
 
         for my $q ('', '--thread') {
+            my $build_start_time = time;
             my $name = my $options = join ' ', grep { length } $p, $q, '--noman';
             for ($name) {
                 s/-Dusequadmath/qm/;
