@@ -46,6 +46,9 @@ Perl | Compiler | Needs new GDBM_File?
 Compiled using clang-10.0.0 and gcc-10.0.1 on an Ubuntu 20.04
 VirtualBox VM (6GB RAM, 4 CPUs) running on Windows 10.
 
+Also tested with Ubuntu clang version 12.0.0-1ubuntu1 gcc (Ubuntu
+10.3.0-1ubuntu1) 10.3.0.
+
 ## Catalog of contents
 
 File | Description
