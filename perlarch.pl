@@ -27,7 +27,9 @@ sub main {
     $perl =~ s{\.tar.gz$}{};
 
     my ($perl_version) = $perl =~ /([\d.]+)/;
-    my $option_noqm = $perl_version lt '5.22' || $perl_version eq '5.28.3';
+    my $option_noqm = $perl_version lt '5.22'
+      || $perl_version =~ /^5\.\d\./ # 5.8 specifically
+      || $perl_version eq '5.28.3';
 
     my $job_start_time = time;
 
