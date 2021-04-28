@@ -19,6 +19,7 @@ sub main {
     my ($option, $usage) = parse_options();
     die "No tarball given\n" unless @ARGV == 1;
     die "File not found\n" unless -f $ARGV[0];
+    die "Perl archive path must be absolute\n" unless $ARGV[0] =~ m{^/};
 
     die "perlbrew home ($PERLBREW_ROOT) not found" unless -d $PERLBREW_ROOT;
 
@@ -85,7 +86,7 @@ sub parse_options {
     my $COMMAND = Getopt::Long::Descriptive::prog_name();
 
     my ($option, $usage) = describe_options(
-        "$COMMAND  %o  path-to-perl-source-tarball",
+        "$COMMAND  %o  abolute-path-of-a-perl-source-tarball",
         [ 'cc=s'       => 'CYO compiler!' ],
         [ 'continue|C' => 'Continue after error' ],
         [ 'jobs|j=i'   => 'Number of jobs', { default => 5 } ],
