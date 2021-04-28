@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-exit;
+
 #:TAGS:
 
 use 5.010;
@@ -30,7 +30,8 @@ sub main {
     }
 
     my ($perl_version) = $perl =~ /([\d.]+)/;
-    my $option_noqm = $perl_version lt '5.22'
+    my $option_noqm = $option->noqm
+      || $perl_version lt '5.22'
       || $perl_version =~ /^5\.\d\./ # 5.8 specifically
       || $perl_version eq '5.28.3';
 
