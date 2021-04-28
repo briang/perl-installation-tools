@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-
+exit;
 #:TAGS:
 
 use 5.010;
@@ -22,9 +22,12 @@ sub main {
 
     die "perlbrew home ($PERLBREW_ROOT) not found" unless -d $PERLBREW_ROOT;
 
-    my $perl = my $perl_tar_gz = shift @ARGV;
-    $perl =~ s{.*/}{};
-    $perl =~ s{\.tar.gz$}{};
+    my $perl = my $perl_tarball = shift @ARGV;
+    for ($perl) {
+        s{.*/}{};
+        s{\.tar\.gz$}{};
+        s{\.tar\.bz2$}{};
+    }
 
     my ($perl_version) = $perl =~ /([\d.]+)/;
     my $option_noqm = $perl_version lt '5.22'
@@ -54,7 +57,7 @@ sub main {
             my @perlbrew = split ' ', join ' ',
               "perlbrew install",
               "-j", $option->{jobs},
-              "$perl_tar_gz --as $name $options",
+              "$perl_tarball --as $name $options",
               $option->cc ? '-Dcc=' . $option->cc : ();
             say "-->@perlbrew";
 
