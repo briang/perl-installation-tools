@@ -17,10 +17,12 @@ exit;
 
 sub main {
     my ($option, $usage) = parse_options();
+    die "Only one path may be given\n" if @ARGV > 1;
     die "No tarball given\n" unless @ARGV == 1;
     die "File not found\n" unless -f $ARGV[0];
     die "Perl archive path must be absolute\n" unless $ARGV[0] =~ m{^/};
 
+    die "\$PERLBREW_ROOT not found\n" unless defined $PERLBREW_ROOT;
     die "perlbrew home ($PERLBREW_ROOT) not found" unless -d $PERLBREW_ROOT;
 
     my $perl = my $perl_tarball = shift @ARGV;
