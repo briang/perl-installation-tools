@@ -11,6 +11,7 @@ use Data::Dump;
 use Getopt::Long::Descriptive;
 
 my $PERLBREW_ROOT = $ENV{PERLBREW_ROOT};
+my $CPU_CORES     = get_cpu_cores();
 
 main();
 exit;
@@ -89,7 +90,7 @@ sub parse_options {
         "$COMMAND  %o  abolute-path-of-a-perl-source-tarball",
         [ 'cc=s'       => 'CYO compiler!' ],
         [ 'continue|C' => 'Continue after error' ],
-        [ 'jobs|j=i'   => 'Number of jobs', { default => 5 } ],
+        [ 'jobs|j=i'   => 'Number of jobs', { default => $CPU_CORES + 1 } ],
         [ 'noqm'       => 'Skip quadmath builds' ],
         [ 'simulate|S' => 'Simulate actions only' ],
         [],
@@ -107,4 +108,15 @@ sub parse_options {
     print($usage) and exit if $option->help;
 
     return ($option, $usage);
+}
+
+sub get_cpu_cores {
+    my $F = '/proc/cpuinfo';
+    my $K = 'cpu cores';
+
+    open my $IN, '<', $F or die qq(cannot open '$F': $!\n);
+    while (<$IN>) {
+	return $1 if /^$K\s*: (\d+)/;
+    }
+    die qq(cannot find "$K" in "$F"\n);
 }
