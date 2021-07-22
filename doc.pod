@@ -1,0 +1,79 @@
+=head1 NAME
+
+perlarch.pl - use perlbrew to install a perl with multiple configurations
+
+=head1 SYNOPSIS
+
+./perlarch.pl [-ChjMS] [long options...] path-to-perl-source-tarball
+
+=head1 DESCRIPTION
+
+XXX
+
+=head1 OPTIONS
+
+=over 4
+
+=item --cc STR
+
+Select a compiler to use. Default is GCC.
+
+Passed through to C<perlbrew ... -Dcc=(STR)>.
+
+=item -C, --continue
+
+Continue after error
+
+=item -j INT, --jobs INT
+
+Number of jobs to run. Default is 5.
+
+Passed through to C<perlbrew -j (INT) ...>.
+
+=item --noqm
+
+Skip quadmath builds.
+
+=item -S, --simulate
+
+Simulate actions only.
+
+=item -h, --help
+
+Display a brief help message and exit.
+
+=item -M, --manual
+
+Display this manpage.
+
+=back
+
+=head1 ENVIRONMENT VARIABLES
+
+=over 4
+
+=item $PERBREW_ROOT
+
+XXX
+
+=back
+
+=head1 AUTHOR
+
+Copyright 2021, Brian Greenfield <briang at cpan dot org>.
+
+=head1 REPOSITORY AND REPORTING BUGS
+
+Please use the L<Issues
+page|https://github.com/briang/perl-installation-tools/issues> of the
+L<GitHub repository|https://github.com/briang/perl-installation-tools>.
+
+=head1 SEE ALSO
+
+=over 4
+
+=item perbrew
+
+=item XXX
+
+=back

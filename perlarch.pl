@@ -96,6 +96,7 @@ sub parse_options {
         [ 'simulate|S' => 'Simulate actions only' ],
         [],
         [ 'help|h'     => 'Display this help message and exit' ],
+        [ 'manual|M'   => 'Display the manpage' ],
 
         { getopt_conf => [ # some of these are already default
             "gnu_compat",       # C<--opt=> sets empty string
