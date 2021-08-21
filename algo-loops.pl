@@ -18,49 +18,63 @@ use Data::Dump;
 use Algorithm::Loops 'NestedLoops';
 use Capture::Tiny 'capture_merged';
 
-my $perl = 'perl-5.35.3';
+my $PERLBREW_ROOT  = $ENV{PERLBREW_ROOT};
+my $PERLBREW_PERLS = "$PERLBREW_ROOT/perls";
 
-my %configure_options = (
-    clang => '-DCC=clang',
-    dbg   => '-DEBUGGING=both',
-    gcc   => '-DCC=gcc',
-    ld    => '--ld',
-    qm    => '-Dusequadmath',
-    th    => '--thread',
-);
+main();
+say "\nAll done!";
 
-my @config_permutations = NestedLoops (
-    [
-        [ sort qw(gcc clang) ],
-#        [ sort qw(dbg NIL)   ],
-#        [ sort qw(qm ld NIL) ],
-#        [ sort qw(th NIL)    ],
-    ],
-    sub {
-        [ grep { $_ ne 'NIL'} @_ ]
+exit;
+
+sub main {
+    my $perl = 'perl-5.35.3'; # XXX
+
+    my %configure_options = (
+        clang => '-DCC=clang',
+        dbg   => '-DEBUGGING=both',
+        gcc   => '-DCC=gcc',
+        ld    => '--ld',
+        qm    => '-Dusequadmath',
+        th    => '--thread',
+    );
+
+    my @config_permutations = NestedLoops (
+        [
+            [ sort qw(gcc clang) ],
+            [ sort qw(dbg NIL)   ],
+            [ sort qw(qm ld NIL) ],
+            [ sort qw(th NIL)    ],
+        ],
+        sub {
+            [ grep { $_ ne 'NIL'} @_ ]
+        }
+    );
+
+    my $number_of_jobs = @config_permutations;
+    my $job = 1;
+    my $all_start_time = time;
+    for my $perm (@config_permutations) {
+        my @terms = @$perm;
+
+        my $as = join '-', $perl, @terms;
+
+        my $command = join ' ',
+          qw(perlbrew install), $perl,
+          '-j', 5,
+          (map { $configure_options{$_} } @terms),
+          "--as", $as;
+
+        say "[$job/$number_of_jobs -- $command]";
+        my $job_start_time = time;
+
+        run_job($command)
+          unless -d "$PERLBREW_PERLS/$as";
+
+        printf "job_time = %s;  total_time = %s\n\n",
+          map { minutes_seconds(time() - $_) } $job_start_time, $all_start_time;
+
+        $job += 1;
     }
-);
-
-my $number_of_jobs = @config_permutations;
-my $job = 1;
-my $all_start_time = time;
-for my $perm (@config_permutations) {
-    my @terms = @$perm;
-
-    my $binary_name = join '-', $perl, @terms;
-    my $command = join ' ',
-      qw(perlbrew install), $perl,
-      '-j', 5,
-      (map { $configure_options{$_} } @terms),
-      "--as", $binary_name;
-
-    say "[$job/$number_of_jobs -- $command]";
-    my $job_start_time = time;
-    run_job($command);
-    printf "job_time = %s;  total_time = %s\n\n",
-      map { minutes_seconds(time() - $_) } $job_start_time, $all_start_time;
-
-    $job += 1;
 }
 
 sub minutes_seconds {
