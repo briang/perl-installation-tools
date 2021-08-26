@@ -10,16 +10,23 @@ for (@ARGV) {
     die qq["$_" is not a file\n]  unless -f;
     die qq["$_" doesn't look like a perl archive\n] unless /\bperl-5\./;
 
-    my $untar_flags = /\.tar\.gz$/ ? "xfz" : "xfj";
-    my $tar_flags   = $untar_flags =~ s/x/c/r;
-    my $folder      = s/\.tar\..*//r;
+    (my $folder = $_) =~ s/\.tar\..*//;
 
-    system_("tar", $untar_flags, $_);
+    untar($_);
     system_(qw(chmod -R +rw), $folder);
     system_(qw(rm -rf), "$folder/ext/GDBM_File");
     system_(qw(cp -a GDBM_File), "$folder/ext");
-    system_(qw(tar), $tar_flags, $_, $folder);
+    tar($_, $folder);
     system_(qw(rm -rf), $folder);
+}
+
+sub tar {
+    my ($archive, $folder) = @_;
+    system_(qw(tar cfa), $archive, $folder); # tar a => compress based on archive suffix
+}
+
+sub untar {
+    system_(qw(tar xf), shift); # tar auto decompresses based on archive suffix
 }
 
 sub system_ {
