@@ -3,8 +3,13 @@
 use strict;
 use warnings;
 
-for (glob "perl-5.*") {
-    next unless -f;
+die "No archives given" if @ARGV == 0;
+
+for (@ARGV) {
+    die qq["$_" does not exist\n] unless -e;
+    die qq["$_" is not a file\n]  unless -f;
+    die qq["$_" doesn't look like a perl archive\n] unless /\bperl-5\./;
+
     my $untar_flags = /\.tar\.gz$/ ? "xfz" : "xfj";
     my $tar_flags   = $untar_flags =~ s/x/c/r;
     my $folder      = s/\.tar\..*//r;
