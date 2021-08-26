@@ -6,6 +6,11 @@ use warnings;
 die "No archives given" if @ARGV == 0;
 
 for (@ARGV) {
+    # as things stand, tar extracts to the current folder, no matter
+    # where the archive is located. From there, things just get worse :(
+    # So, just don't do it.
+    die qq["$_" appears to be in another directory] if m{/};
+
     die qq["$_" does not exist\n] unless -e;
     die qq["$_" is not a file\n]  unless -f;
     die qq["$_" doesn't look like a perl archive\n] unless /\bperl-5\./;
@@ -32,5 +37,4 @@ sub untar {
 sub system_ {
     print "@_\n";
     system(@_) == 0 or die "system() failed: $?";
-    return 0;
 }
