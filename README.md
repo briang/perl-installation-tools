@@ -53,7 +53,6 @@ Also tested with Ubuntu clang version 12.0.0-1ubuntu1 gcc (Ubuntu
 
 File | Description
 -|-
-fatal.t | Replacement ```GDBM_File/t/fatal.t``` from perl-5.32.0.
 fix-gdbm_file.pl | Repack perl sources with updated ```GDBM_File```.
 install-dists.sh | install dists from file into many perls
 install-perls | Attempt to install multiple perls with multiple compilers.
