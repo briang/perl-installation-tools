@@ -3,25 +3,42 @@
 use strict;
 use warnings;
 
+use Cwd;
+use File::Temp 'tempdir';
+
+use Data::Dump; # XXX
+@ARGV = '/home/cpan/perl-source/perl-5.28.3.tar.gz';
+
 die "No archives given" if @ARGV == 0;
+dd
+my $cwd = getcwd;
 
-for (@ARGV) {
-    # as things stand, tar extracts to the current folder, no matter
-    # where the archive is located. From there, things just get worse :(
-    # So, just don't do it.
-    die qq["$_" appears to be in another directory] if m{/};
+for my $archive (@ARGV) {
+    for ($archive) {
+        die qq["$_" does not exist\n] unless -e;
+        die qq["$_" is not a file\n]  unless -f;
+        die qq["$_" doesn't look like a perl archive\n] unless /\bperl-5\./;
+    }
 
-    die qq["$_" does not exist\n] unless -e;
-    die qq["$_" is not a file\n]  unless -f;
-    die qq["$_" doesn't look like a perl archive\n] unless /\bperl-5\./;
+    # Here's some typical values:
+    #
+    # $archive       = "/home/cpan/perl-source/perl-5.28.3.tar.gz"
+    # $cwd           = "/home/cpan/perlbrew/tools"
+    # $temp_folder   = "/tmp/0nIOKcqESN"
+    # $perl_version  = "perl-5.28.3"
+    # $source_folder = "/tmp/0nIOKcqESN/perl-5.28.3"
+    #
+    # I hate these var names :(
 
-    (my $folder = $_) =~ s/\.tar\..*//;
-
-    untar($_);
-    system_(qw(chmod -R +rw), $folder);
-    write_file_from_data("$folder/ext/GDBM_File/t/fatal.t");
-    tar($_, $folder);
-    system_(qw(rm -rf), $folder);
+    my $temp_folder = tempdir;
+    my ($perl_version) = $archive =~ m{.*/(.*?)(?:\.tar\.gz|\.tar\.bz2|\.tar\.xz|\.tgz)$};
+    untar($archive, $temp_folder);
+    my ($source_folder) = glob "$temp_folder/*";
+    system_(qw(chmod -R +rw), $source_folder);
+    write_file_from_data("$source_folder/ext/GDBM_File/t/fatal.t");
+    chdir $temp_folder or die qq(Cannot change to "$temp_folder": $!);
+    tar("$perl_version.tar.gz", $perl_version);
+    system_('mv', "$temp_folder/$perl_version.tar.gz", $cwd);
 }
 
 sub tar {
@@ -30,7 +47,8 @@ sub tar {
 }
 
 sub untar {
-    system_(qw(tar xf), shift); # tar auto decompresses based on archive suffix
+    my ($archive, $folder) = @_;
+    system_(qw(tar xf), $archive, "--directory", $folder); # tar auto decompresses based on archive suffix
 }
 
 sub system_ {
