@@ -19,8 +19,7 @@ for (@ARGV) {
 
     untar($_);
     system_(qw(chmod -R +rw), $folder);
-    system_(qw(rm -rf), "$folder/ext/GDBM_File");
-    system_(qw(cp -a GDBM_File), "$folder/ext");
+    system_(qw(cp -a fatal.t), "$folder/ext/GDBM_File/t/");
     tar($_, $folder);
     system_(qw(rm -rf), $folder);
 }

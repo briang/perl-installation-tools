@@ -23,7 +23,7 @@ TODO
 
 ### Result matrix
 
-Perl | Compiler | Needs new GDBM_File?
+Perl | Compiler | Needs new GDBM_File/t/fatal.t?
 -|-|-
 5.6.2  | _failed_ |
 5.8.9  | clang |
@@ -53,8 +53,8 @@ Also tested with Ubuntu clang version 12.0.0-1ubuntu1 gcc (Ubuntu
 
 File | Description
 -|-
+fatal.t | Replacement ```GDBM_File/t/fatal.t``` from perl-5.32.0.
 fix-gdbm_file.pl | Repack perl sources with updated ```GDBM_File```.
-GDBM\_File | Replacement ```GDBM_File``` from perl-5.32.0.
 install-dists.sh | install dists from file into many perls
 install-perls | Attempt to install multiple perls with multiple compilers.
 perlarch.pl | perl script to install arch variants (longdouble, quadmath, threaded etc)
