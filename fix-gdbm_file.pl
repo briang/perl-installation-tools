@@ -6,11 +6,8 @@ use warnings;
 use Cwd;
 use File::Temp 'tempdir';
 
-use Data::Dump; # XXX
-@ARGV = '/home/cpan/perl-source/perl-5.28.3.tar.gz';
-
 die "No archives given" if @ARGV == 0;
-dd
+
 my $cwd = getcwd;
 
 for my $archive (@ARGV) {
@@ -26,19 +23,19 @@ for my $archive (@ARGV) {
     # $cwd           = "/home/cpan/perlbrew/tools"
     # $temp_folder   = "/tmp/0nIOKcqESN"
     # $perl_version  = "perl-5.28.3"
-    # $source_folder = "/tmp/0nIOKcqESN/perl-5.28.3"
     #
     # I hate these var names :(
 
-    my $temp_folder = tempdir;
     my ($perl_version) = $archive =~ m{.*/(.*?)(?:\.tar\.gz|\.tar\.bz2|\.tar\.xz|\.tgz)$};
-    untar($archive, $temp_folder);
-    my ($source_folder) = glob "$temp_folder/*";
-    system_(qw(chmod -R +rw), $source_folder);
-    write_file_from_data("$source_folder/ext/GDBM_File/t/fatal.t");
+
+    my $temp_folder = tempdir;
     chdir $temp_folder or die qq(Cannot change to "$temp_folder": $!);
+
+    untar($archive);
+    system_(qw(chmod -R +rw .));
+    write_file_from_data("$perl_version/ext/GDBM_File/t/fatal.t");
     tar("$perl_version.tar.gz", $perl_version);
-    system_('mv', "$temp_folder/$perl_version.tar.gz", $cwd);
+    system_('mv', "$perl_version.tar.gz", $cwd);
 }
 
 sub tar {
@@ -47,8 +44,8 @@ sub tar {
 }
 
 sub untar {
-    my ($archive, $folder) = @_;
-    system_(qw(tar xf), $archive, "--directory", $folder); # tar auto decompresses based on archive suffix
+    my ($archive) = @_;
+    system_(qw(tar xf), $archive); # tar auto decompresses based on archive suffix
 }
 
 sub system_ {
