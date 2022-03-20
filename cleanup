@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo "This may take a few seconds. Or minutes."
+rm -rf ../dists/*  ../build/*  ../build.*  ~/.cpanm/work/*
