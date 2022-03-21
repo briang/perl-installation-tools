@@ -77,10 +77,7 @@ sub main {
     }
 }
 
-sub minutes_seconds {
-    my $seconds = shift;
-    sprintf "%dm%d", $seconds / 60, $seconds % 60;
-}
+sub minutes_seconds($seconds) { sprintf "%dm%d", $seconds / 60, $seconds % 60 }
 
 sub run_job($command) {
     my ( $output, $exit ) = capture_merged { system($command) };
