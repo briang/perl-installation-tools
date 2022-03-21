@@ -38,22 +38,31 @@ sub main(@cli_args) {
         th    => '--thread',
     );
 
-    my @config_permutations = NestedLoops (
-        [
-            [ sort qw(gcc clang) ],
-            [ sort qw(dbg NIL)   ],
-            [ sort qw(qm ld NIL) ],
-            [ sort qw(th NIL)    ],
+    my %config_set_for = (
+        full => [
+            NestedLoops(
+                [ [ sort qw(gcc clang) ],
+                  [ sort qw(dbg NIL)   ],
+                  [ sort qw(qm ld NIL) ],
+                  [ sort qw(th NIL)    ] ],
+                sub { [ grep { $_ ne 'NIL'} @_ ] }
+            ),
         ],
-        sub {
-            [ grep { $_ ne 'NIL'} @_ ]
-        }
+        quick => [
+            NestedLoops(
+                [ [ sort qw(ld qm NIL) ],
+                  [ sort qw(th NIL)    ] ],
+                sub { [ grep { $_ ne 'NIL'} @_ ] }
+            ),
+        ],
     );
 
-    my $number_of_jobs = @config_permutations;
-    my $job = 1;
+    my @perms          = $config_set_for{$conf_set}->@*;
+    my $number_of_jobs = @perms;
+    my $job            = 1;
     my $all_start_time = time;
-    for my $perm (@config_permutations) {
+
+    for my $perm (@perms) {
         my @terms = @$perm;
 
         my $as = join '-', $perl, @terms;
