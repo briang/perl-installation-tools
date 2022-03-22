@@ -21,13 +21,13 @@ use Capture::Tiny 'capture_merged';
 my $PERLBREW_ROOT  = $ENV{PERLBREW_ROOT};
 my $PERLBREW_PERLS = "$PERLBREW_ROOT/perls";
 
-main( qw[perl-5.35.3 full] ); # XXX
+main( qw[full perl-5.35.3] ); # XXX
 say "\nAll done!";
 
 exit;
 
 sub main(@cli_args) {
-    my ($perl, $conf_set) = @cli_args;
+    my ( $conf_set, $perl ) = @cli_args;
 
     my %configure_options = (
         clang => '-DCC=clang',
