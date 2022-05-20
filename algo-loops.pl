@@ -19,7 +19,9 @@ use Algorithm::Loops 'NestedLoops';
 use Capture::Tiny 'capture_merged';
 use Getopt::Long::Descriptive;
 
-my $APP            = $ARGV[0];
+@ARGV = qw[full perl-blead]; # XXX
+
+my $APP            = $0;
 my $PERLBREW_ROOT  = $ENV{PERLBREW_ROOT};
 my $PERLBREW_PERLS = "$PERLBREW_ROOT/perls";
 
@@ -34,9 +36,7 @@ my ($option, $usage) = describe_options(
 
 print($usage), exit if $option->help;
 
-# die;
-
-main( qw[full perl-blead] ); # XXX
+main( @ARGV );
 say "\nAll done!";
 
 exit;
