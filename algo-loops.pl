@@ -24,6 +24,7 @@ use Getopt::Long::Descriptive;
 my $APP            = $0;
 my $PERLBREW_ROOT  = $ENV{PERLBREW_ROOT};
 my $PERLBREW_PERLS = "$PERLBREW_ROOT/perls";
+my $OPT_MAN        = 0; # install manpages
 
 $Getopt::Long::autoabbrev = 0;  # don't allow abbrevs of --some-long-option
 my ($option, $usage) = describe_options(
@@ -85,6 +86,7 @@ sub main(@cli_args) {
         my $command = join ' ',
           qw(perlbrew install), $perl,
           '-j', 5,
+          ($OPT_MAN ? () : '--noman'),
           (map { $configure_options{$_} } @terms),
           "--as", $as;
 
