@@ -28,7 +28,7 @@ my $OPT_MAN        = 0; # install manpages
 
 $Getopt::Long::autoabbrev = 0;  # don't allow abbrevs of --some-long-option
 my ($option, $usage) = describe_options(
-    "$APP  %o  conf-set  perl-version ...",
+    "$APP  %o  conf-set  perl-version | path-to-tarball",
     [ 'halt|H' => 'halt on error' ],
     [],
     # [ 'verbose|v', "print extra stuff" ],
@@ -78,13 +78,21 @@ sub main(@cli_args) {
     my $job            = 1;
     my $all_start_time = time;
 
+    my $spec_or_tarball = $perl;
+    if ( $perl =~ m{/} ) {
+        for ($perl) {
+            s{.*/}[];           # path
+            s{\.tar\.[gx]z$}{}; # suffix
+        }
+    }
+
     for my $perm (@perms) {
         my @terms = @$perm;
 
         my $as = join '-', $perl, @terms;
 
         my $command = join ' ',
-          qw(perlbrew install), $perl,
+          qw(perlbrew install), $spec_or_tarball,
           '-j', 5,
           ($OPT_MAN ? () : '--noman'),
           (map { $configure_options{$_} } @terms),
