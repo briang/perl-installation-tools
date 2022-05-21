@@ -43,7 +43,7 @@ say "\nAll done!";
 exit;
 
 sub main(@cli_args) {
-    my ( $conf_set, $perl ) = @cli_args;
+    my ( $conf_set, $spec_or_tarball ) = @cli_args;
 
     my %configure_options = (
         clang => '-DCC=clang',
@@ -77,19 +77,12 @@ sub main(@cli_args) {
     my $number_of_jobs = @perms;
     my $job            = 1;
     my $all_start_time = time;
-
-    my $spec_or_tarball = $perl;
-    if ( $perl =~ m{/} ) {
-        for ($perl) {
-            s{.*/}[];           # path
-            s{\.tar\.[gx]z$}{}; # suffix
-        }
-    }
+    my $perl_vname     = vname_from($spec_or_tarball);
 
     for my $perm (@perms) {
         my @terms = @$perm;
 
-        my $as = join '-', $perl, @terms;
+        my $as = join '-', $perl_vname, @terms;
 
         my $command = join ' ',
           qw(perlbrew install), $spec_or_tarball,
@@ -116,4 +109,13 @@ sub minutes_seconds($seconds) { sprintf "%dm%d", $seconds / 60, $seconds % 60 }
 sub run_job($command) {
     my ( $output, $exit ) = capture_merged { system($command) };
     die "$output\n" if $exit != 0;
+}
+
+sub vname_from($tarball) {
+    for ( $tarball ) {
+        s{\.tar\.(?:gz|xz|bz2)$}[] # suffix
+          && s{.*/}[];             # path
+    }
+
+    return $tarball;
 }
