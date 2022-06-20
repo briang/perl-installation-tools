@@ -36,7 +36,14 @@ my $JOBS           = '-j 5';
 #     [ 'help', "print usage message and exit" ],
 # );
 
-print($usage), exit if $option->help;
+# print($usage), exit if $option->help;
+
+if ( @ARGV != 2 ) {
+    die qq(usage: $APP full|quick perl-spec\n);
+}
+elsif ( $ARGV[0] !~ /full|quick/ ) {
+    die sprintf qq(First argument was "%s" but must be "full" or "quick"\n), $ARGV[0];
+}
 
 main( @ARGV );
 say "\nAll done!";
