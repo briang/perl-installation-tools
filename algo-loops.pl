@@ -19,21 +19,21 @@ use Algorithm::Loops 'NestedLoops';
 use Capture::Tiny 'capture_merged';
 use Getopt::Long::Descriptive;
 
-@ARGV = qw[full perl-blead]; # XXX
+# @ARGV = qw[full perl-5.37.0]; # XXX
 
 my $APP            = $0;
 my $PERLBREW_ROOT  = $ENV{PERLBREW_ROOT};
 my $PERLBREW_PERLS = "$PERLBREW_ROOT/perls";
 my $OPT_MAN        = 0; # install manpages
 
-$Getopt::Long::autoabbrev = 0;  # don't allow abbrevs of --some-long-option
-my ($option, $usage) = describe_options(
-    "$APP  %o  conf-set  perl-version | path-to-tarball",
-    [ 'halt|H' => 'halt on error' ],
-    [],
-    # [ 'verbose|v', "print extra stuff" ],
-    [ 'help', "print usage message and exit" ],
-);
+# $Getopt::Long::autoabbrev = 0;  # don't allow abbrevs of --some-long-option
+# my ($option, $usage) = describe_options(
+#     "$APP  %o  conf-set  perl-version | path-to-tarball",
+#     [ 'halt|H' => 'halt on error' ],
+#     [],
+#     # [ 'verbose|v', "print extra stuff" ],
+#     [ 'help', "print usage message and exit" ],
+# );
 
 print($usage), exit if $option->help;
 
