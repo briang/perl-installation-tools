@@ -79,6 +79,12 @@ sub main(@cli_args) {
                 sub { [ grep { $_ ne 'NIL'} @_ ] }
             ),
         ],
+        vquick => [
+            NestedLoops(
+                [ [ sort qw(NIL) ], ],
+                sub { [ grep { $_ ne 'NIL'} @_ ] }
+            ),
+        ],
     );
 
     my @perms          = $config_set_for{$conf_set}->@*;
