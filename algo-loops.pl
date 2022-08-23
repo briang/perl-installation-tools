@@ -121,7 +121,7 @@ sub main(@cli_args) {
 sub minutes_seconds($seconds) { sprintf "%dm%d", $seconds / 60, $seconds % 60 }
 
 sub run_job($command) {
-    if (0) {
+    if ($option->simulate) {
         say "DRY_RUN: $command";
         return;
     }
