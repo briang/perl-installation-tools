@@ -44,12 +44,25 @@ my %CONFIG_SET_FOR = (
             sub { [ grep { $_ ne 'NIL'} @_ ] }
         ),
     ],
-    vquick => [ [] ],           # no options at all
+    vquick => [ [] ], # no options at all
 );
 
-if ( @ARGV != 2 ) {
-    die qq(usage: $APP full|quick perl-spec\n);
-}
+$Getopt::Long::autoabbrev = 0;  # don't allow abbrevs of --some-long-option
+my ($option, $help) = describe_options(
+    "$APP  %o  conf-set  perl-version | path-to-tarball",
+
+    [ 'simulate|s' => 'do not install anything' ],
+
+    [],
+
+    [ 'help', "print this help message and exit" ],
+);
+my $usage = "usage: " . (split /\n/, $help)[0];
+
+print($help), exit if $option->help;
+
+die "$usage\n"
+    if @ARGV != 2;
 
 if ( ! exists $CONFIG_SET_FOR{$ARGV[0]} ) {
     my $config_set_names =
@@ -61,7 +74,7 @@ main( @ARGV );
 say "\nAll done!";
 
 exit;
-
+################################################################################
 sub main(@cli_args) {
     my ( $conf_set, $spec_or_tarball ) = @cli_args;
 
