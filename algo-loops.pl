@@ -37,12 +37,34 @@ my $JOBS           = '-j 5';
 # );
 
 # print($usage), exit if $option->help;
+my %CONFIG_SET_FOR = (
+    full => [
+        NestedLoops(
+            [ [ sort qw(gcc clang) ],
+              [ sort qw(dbg NIL)   ],
+              [ sort qw(qm ld NIL) ],
+              [ sort qw(th NIL)    ] ],
+            sub { [ grep { $_ ne 'NIL'} @_ ] }
+        ),
+    ],
+    quick => [
+        NestedLoops(
+            [ [ sort qw(ld qm NIL) ],
+              [ sort qw(th NIL)    ] ],
+            sub { [ grep { $_ ne 'NIL'} @_ ] }
+        ),
+    ],
+    vquick => [ [] ],           # no options at all
+);
 
 if ( @ARGV != 2 ) {
     die qq(usage: $APP full|quick perl-spec\n);
 }
-elsif ( $ARGV[0] !~ /full|quick/ ) {
-    die sprintf qq(First argument was "%s" but must be "full" or "quick"\n), $ARGV[0];
+
+if ( ! exists $CONFIG_SET_FOR{$ARGV[0]} ) {
+    my $config_set_names =
+        join ", ", map { qq("$_") } sort keys %CONFIG_SET_FOR;
+    die sprintf qq(First argument was "%s" but must be one of $config_set_names\n), $ARGV[0];
 }
 
 main( @ARGV );
@@ -62,32 +84,7 @@ sub main(@cli_args) {
         th    => '--thread',
     );
 
-    my %config_set_for = (
-        full => [
-            NestedLoops(
-                [ [ sort qw(gcc clang) ],
-                  [ sort qw(dbg NIL)   ],
-                  [ sort qw(qm ld NIL) ],
-                  [ sort qw(th NIL)    ] ],
-                sub { [ grep { $_ ne 'NIL'} @_ ] }
-            ),
-        ],
-        quick => [
-            NestedLoops(
-                [ [ sort qw(ld qm NIL) ],
-                  [ sort qw(th NIL)    ] ],
-                sub { [ grep { $_ ne 'NIL'} @_ ] }
-            ),
-        ],
-        vquick => [
-            NestedLoops(
-                [ [ sort qw(NIL) ], ],
-                sub { [ grep { $_ ne 'NIL'} @_ ] }
-            ),
-        ],
-    );
-
-    my @perms          = $config_set_for{$conf_set}->@*;
+    my @perms          = $CONFIG_SET_FOR{$conf_set}->@*;
     my $number_of_jobs = @perms;
     my $job            = 1;
     my $all_start_time = time;
