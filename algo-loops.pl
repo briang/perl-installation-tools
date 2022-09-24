@@ -25,7 +25,6 @@ my $APP            = $0 =~ s{.*/}{}r;
 my $PERLBREW_ROOT  = $ENV{PERLBREW_ROOT};
 my $PERLBREW_PERLS = "$PERLBREW_ROOT/perls";
 my $OPT_MAN        = 0; # install manpages
-my $JOBS           = '-j 5';
 
 my %CONFIG_SET_FOR = (
     full => [
@@ -51,6 +50,7 @@ $Getopt::Long::autoabbrev = 0;  # don't allow abbrevs of --some-long-option
 my ($option, $help) = describe_options(
     "$APP  %o  conf-set  perl-version | path-to-tarball",
 
+    [ 'jobs|j=i'   => 'the number of jobs `make` will run simultaneously', { default => 5 } ],
     [ 'prefix|p=s' => 'add the given prefix to each installation' ],
     [ 'simulate|s' => 'do not install anything' ],
 
@@ -61,6 +61,8 @@ my ($option, $help) = describe_options(
 my $usage = "usage: " . (split /\n/, $help)[0];
 
 print($help), exit if $option->help;
+
+die qq("jobs" cannot be negative\n) if $option->jobs < 0;
 
 die "$usage\n"
     if @ARGV != 2;
@@ -103,7 +105,7 @@ sub main(@cli_args) {
 
         my $command = join ' ',
           qw(perlbrew install), $spec_or_tarball,
-          $JOBS,
+          ($option->jobs ? '-j ' . $option->jobs : ()),
           ($OPT_MAN ? () : '--noman'),
           (map { $configure_options{$_} } @terms),
           "--as", $as;
