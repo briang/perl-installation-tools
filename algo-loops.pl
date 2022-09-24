@@ -47,7 +47,7 @@ my %CONFIG_SET_FOR = (
 
 $Getopt::Long::autoabbrev = 0;  # don't allow abbrevs of --some-long-option
 my ($option, $help) = describe_options(
-    "$APP  %o  conf-set  perl-version | path-to-tarball",
+    "$APP  %o  conf-set  ( perl-version | path-to-tarball ) +",
 
     [ 'jobs|j=i'   => 'the number of jobs `make` will run simultaneously (default: 5)', { default => 5 } ],
     [ 'man|m'      => 'also install man pages (default: don\'t)' ],
@@ -65,7 +65,7 @@ print($help), exit if $option->help;
 die qq("jobs" cannot be negative\n) if $option->jobs < 0;
 
 die "$usage\n"
-    if @ARGV != 2;
+    if @ARGV < 2;
 
 if ( ! exists $CONFIG_SET_FOR{$ARGV[0]} ) {
     my $config_set_names =
@@ -73,7 +73,8 @@ if ( ! exists $CONFIG_SET_FOR{$ARGV[0]} ) {
     die sprintf qq(First argument was "%s" but must be one of $config_set_names\n), $ARGV[0];
 }
 
-main( @ARGV );
+my $config = shift @ARGV;
+main( $config, shift @ARGV ) while @ARGV;
 say "\nAll done!";
 
 exit;
