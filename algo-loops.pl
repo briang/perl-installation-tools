@@ -51,6 +51,7 @@ $Getopt::Long::autoabbrev = 0;  # don't allow abbrevs of --some-long-option
 my ($option, $help) = describe_options(
     "$APP  %o  conf-set  perl-version | path-to-tarball",
 
+    [ 'prefix|p=s' => 'add the given prefix to each installation' ],
     [ 'simulate|s' => 'do not install anything' ],
 
     [],
@@ -97,6 +98,8 @@ sub main(@cli_args) {
         my @terms = @$perm;
 
         my $as = join '-', $perl_vname, @terms;
+        $as = $option->prefix . $as
+            if $option->prefix;
 
         my $command = join ' ',
           qw(perlbrew install), $spec_or_tarball,
