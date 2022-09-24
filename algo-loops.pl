@@ -24,7 +24,6 @@ use Getopt::Long::Descriptive;
 my $APP            = $0 =~ s{.*/}{}r;
 my $PERLBREW_ROOT  = $ENV{PERLBREW_ROOT};
 my $PERLBREW_PERLS = "$PERLBREW_ROOT/perls";
-my $OPT_MAN        = 0; # install manpages
 
 my %CONFIG_SET_FOR = (
     full => [
@@ -50,7 +49,8 @@ $Getopt::Long::autoabbrev = 0;  # don't allow abbrevs of --some-long-option
 my ($option, $help) = describe_options(
     "$APP  %o  conf-set  perl-version | path-to-tarball",
 
-    [ 'jobs|j=i'   => 'the number of jobs `make` will run simultaneously', { default => 5 } ],
+    [ 'jobs|j=i'   => 'the number of jobs `make` will run simultaneously (default: 5)', { default => 5 } ],
+    [ 'man|m'      => 'also install man pages (default: don\'t)' ],
     [ 'prefix|p=s' => 'add the given prefix to each installation' ],
     [ 'simulate|s' => 'do not install anything' ],
 
@@ -106,7 +106,7 @@ sub main(@cli_args) {
         my $command = join ' ',
           qw(perlbrew install), $spec_or_tarball,
           ($option->jobs ? '-j ' . $option->jobs : ()),
-          ($OPT_MAN ? () : '--noman'),
+          ($option->man ? () : '--noman'),
           (map { $configure_options{$_} } @terms),
           "--as", $as;
 
