@@ -126,10 +126,7 @@ sub main(@cli_args) {
 sub minutes_seconds($seconds) { sprintf "%dm%d", $seconds / 60, $seconds % 60 }
 
 sub run_job($command) {
-    if ($option->simulate) {
-        say "DRY_RUN: $command";
-        return;
-    }
+    return if $option->simulate;
     my ( $output, $exit ) = capture_merged { system($command) };
     die "$output\n" if $exit != 0;
 }
