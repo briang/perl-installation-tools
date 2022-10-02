@@ -53,9 +53,13 @@ Also tested with Ubuntu clang version 12.0.0-1ubuntu1 gcc (Ubuntu
 
 File | Description
 -|-
-fix-gdbm_file.pl | Repack perl sources with updated ```GDBM_File```.
-install-dists.sh | install dists from file into many perls
+algo-loops.pl | new perl multi-installer nased on Algorithm::Loops
+cleanup-perlbrew-builds.sh | cleanup perlbrew/{build/,build.\*.log}
+fix-gdbm_file.pl | Repack perl sources with updated ```GDBM_File/```.
+GDBM_File | taken from perl-5.30(?)
+install-all.pl | Install a bunch of perls using algo-loops.pl
+install-dists.sh | Install dists (modules) listed in `file` into many perls
 install-perls | Attempt to install multiple perls with multiple compilers.
-perlarch.pl | perl script to install arch variants (longdouble, quadmath, threaded etc)
+LICENSE | Copy of the MIT license
 obsolete/ | Folder containing old scripts
-README | This!
+README.md | This!
