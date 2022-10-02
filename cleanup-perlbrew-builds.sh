@@ -14,5 +14,5 @@ __base="$(basename ${__file} .sh)"
 
 arg1="${1:-}"
 ################################################################################
-rm -rf ~/perlbrew/build/*
-rm     ~/perlbrew/build.*.log
+rm -rf $PERLBREW_ROOT/build/*
+rm     $PERLBREW_ROOT/build.*.log
