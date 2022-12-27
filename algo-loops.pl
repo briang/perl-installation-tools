@@ -10,7 +10,6 @@ use experimental qw(signatures);
 # use Capture::Tiny;
 use Data::Dump;
 # use List::AllUtils;
-# use Object::Pad
 # use Path::Tiny;
 # use Time::Piece;
 # use Try::Tiny;
@@ -18,6 +17,8 @@ use Data::Dump;
 use Algorithm::Loops 'NestedLoops';
 use Capture::Tiny 'capture_merged';
 use Getopt::Long::Descriptive;
+
+my $PATCHLEVEL_H = 'patchlevel.h'; # where perl's version is in source
 
 # @ARGV = qw[full perl-5.37.0]; # XXX
 
@@ -73,6 +74,7 @@ if ( ! exists $CONFIG_SET_FOR{$ARGV[0]} ) {
     die sprintf qq(First argument was "%s" but must be one of $config_set_names\n), $ARGV[0];
 }
 
+# FIXME : first arg might be an option
 my $config = shift @ARGV;
 main( $config, shift @ARGV ) while @ARGV;
 say "\nAll done!";
@@ -139,4 +141,17 @@ sub vname_from($tarball) {
     }
 
     return $tarball;
+}
+
+sub get_perl_version_from_source {
+    open my $IN, '<', $PATCHLEVEL_H;
+    my ($revision, $version, $subversion);
+    while (<$IN>) {
+        $revision   = $1 if /^\#define \s+ PERL_REVISION   \s+ (\d+)/x; # 5
+        $version    = $1 if /^\#define \s+ PERL_VERSION    \s+ (\d+)/x; # 37
+        $subversion = $1 if /^\#define \s+ PERL_SUBVERSION \s+ (\d+)/x; # 8
+    }
+    die qq[cannot find perl version in "$PATCHLEVEL_H"]
+        unless defined $revision && defined $version && defined $subversion;
+    return qq[$revision.$version.$subversion];
 }
