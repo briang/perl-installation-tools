@@ -50,6 +50,7 @@ $Getopt::Long::autoabbrev = 0;  # don't allow abbrevs of --some-long-option
 my ($option, $help) = describe_options(
     "$APP  %o  conf-set  ( perl-version | path-to-tarball ) +",
 
+    [ 'clean'      => 'delete all build artefacts in `perls/` and `build/`' ],
     [ 'jobs|j=i'   => 'the number of jobs `make` will run simultaneously (default: 5)', { default => 5 } ],
     [ 'man|m'      => 'also install man pages (default: don\'t)' ],
     [ 'prefix|p=s' => 'add the given prefix to each installation' ],
@@ -124,6 +125,9 @@ sub main(@cli_args) {
 
         $job += 1;
     }
+
+    cleanup($perl_vname)
+        # if $option->clean;
 }
 
 sub minutes_seconds($seconds) { sprintf "%dm%d", $seconds / 60, $seconds % 60 }
@@ -154,4 +158,13 @@ sub get_perl_version_from_source {
     die qq[cannot find perl version in "$PATCHLEVEL_H"]
         unless defined $revision && defined $version && defined $subversion;
     return qq[$revision.$version.$subversion];
+}
+
+sub cleanup($vname) {
+    # FIXME: alse remove $PERLBREW_ROOT/dists/$vname\\* ?
+    say qq[rm -rf $PERLBREW_ROOT/perls/$vname*  $PERLBREW_ROOT/build/*  $PERLBREW_ROOT/build.*];
+
+    # for my $f ( "dists/$vname*", "perls/$vname*", "build/*", "build.*" ) {
+    #     system "echo rm -rf $PERLBREW_ROOT/$f";
+    # }
 }
