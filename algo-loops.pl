@@ -75,7 +75,6 @@ if ( ! exists $CONFIG_SET_FOR{$ARGV[0]} ) {
     die sprintf qq(First argument was "%s" but must be one of $config_set_names\n), $ARGV[0];
 }
 
-# FIXME : first arg might be an option
 my $config = shift @ARGV;
 main( $config, shift @ARGV ) while @ARGV;
 say "\nAll done!";
