@@ -11,12 +11,12 @@ use experimental qw(signatures);
 use Data::Dump;
 # use List::AllUtils;
 # use Path::Tiny;
-# use Time::Piece;
 # use Try::Tiny;
 ################################################################################
 use Algorithm::Loops 'NestedLoops';
 use Capture::Tiny 'capture_merged';
 use Getopt::Long::Descriptive;
+use Time::Piece;
 
 my $PATCHLEVEL_H = 'patchlevel.h'; # where perl's version is in source
 
@@ -119,8 +119,9 @@ sub main(@cli_args) {
         run_job($command)
           unless -d "$PERLBREW_PERLS/$as";
 
-        printf "job_time = %s;  total_time = %s\n\n",
-          map { minutes_seconds(time() - $_) } $job_start_time, $all_start_time;
+        printf "@%s job_time = %s;  total_time = %s\n\n",
+            time_now(),
+            map { minutes_seconds(time() - $_) } $job_start_time, $all_start_time;
 
         $job += 1;
     }
@@ -130,6 +131,11 @@ sub main(@cli_args) {
 }
 
 sub minutes_seconds($seconds) { sprintf "%dm%d", $seconds / 60, $seconds % 60 }
+
+sub time_now() {
+    my $lt = localtime();
+    return sprintf "%02d:%02d", map { $lt->$_ } qw'hour minute';
+}
 
 sub run_job($command) {
     return if $option->simulate;
