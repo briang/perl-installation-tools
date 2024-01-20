@@ -11,21 +11,24 @@ binmode STDERR, ':encoding(UTF-8)';
 
 use Data::Dump; # FIXME
 ################################################################################
-use LWP::Simple;
+use HTTP::Tiny;
 
 my $URL   = 'https://metacpan.org/recent';
 my $EVERY = 300; # seconds
 my $RE    = qr/>(perl-5.*?)</;
 
 while () {
-    my $recent = get $URL
-        or die $!;
+    my $response = HTTP::Tiny->new->get($URL);
+    die "Failed: $response->{status} - $response->{reason}\n"
+        unless $response->{success};
+    my $recent = $response->{content}
+        or die "empty response\n";
 
     for (split /\n/, $recent) {
         if (/$RE/) {
             say "$1 is available";
 
-            while () { beep(); sleep 1 }
+            while () { $|=1; beep(); print "*"; sleep 1 }
         }
     }
 
