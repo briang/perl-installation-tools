@@ -64,7 +64,8 @@ my $usage = "usage: " . (split /\n/, $help)[0];
 
 print($help), exit if $option->help;
 
-die qq("jobs" cannot be negative\n) if $option->jobs < 0;
+die sprintf qq("%s" is an invalid value for "jobs"\n), $option->jobs
+    if $option->jobs < 1;
 
 die "$usage\n"
     if @ARGV < 2;
