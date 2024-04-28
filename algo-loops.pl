@@ -10,12 +10,12 @@ use experimental qw(signatures);
 # use Capture::Tiny;
 use Data::Dump;
 # use List::AllUtils;
-# use Path::Tiny;
 # use Try::Tiny;
 ################################################################################
 use Algorithm::Loops 'NestedLoops';
 use Capture::Tiny 'capture_merged';
 use Getopt::Long::Descriptive;
+use Path::Tiny;
 use Time::Piece;
 
 my $PATCHLEVEL_H = 'patchlevel.h'; # where perl's version is in source
@@ -93,6 +93,10 @@ sub main(@cli_args) {
         qm    => '-Dusequadmath',
         th    => '--thread',
     );
+
+    if ($spec_or_tarball =~ m{[./]}) { # it's a tarball
+        $spec_or_tarball = path($spec_or_tarball)->absolute
+    }
 
     my @perms          = $CONFIG_SET_FOR{$conf_set}->@*;
     my $number_of_jobs = @perms;
