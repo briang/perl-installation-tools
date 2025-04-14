@@ -163,7 +163,6 @@ Path::Tiny
 Perl::Critic
 Perl::Tidy
 PerlIO::gzip
-Pod
 Pod::Coverage
 Pod::Parser
 Pod::Spell
