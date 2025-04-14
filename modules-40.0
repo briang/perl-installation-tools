@@ -44,7 +44,6 @@ DateTime::Locale
 DateTime::TimeZone
 DateTime::TimeZone::Alias
 DateTime::TimeZone::Catalog::Extend
-DB::Object
 DBD::SQLite
 DBI
 Devel::CheckBin
@@ -128,7 +127,6 @@ MIME::Base32
 Module::Build
 Module::Build::Tiny
 Module::CoreList
-Module::Generic
 Module::Implementation
 Module::Pluggable
 Module::Runtime
