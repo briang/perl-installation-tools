@@ -47,6 +47,8 @@ DateTime::TimeZone::Catalog::Extend
 DBD::SQLite
 DBI
 Devel::CheckBin
+Devel::Cover
+Devel::NYTProf
 Devel::StackTrace
 Devel::Symdump
 Digest::MD5
