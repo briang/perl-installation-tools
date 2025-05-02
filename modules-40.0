@@ -204,8 +204,13 @@ Syntax::Keyword::Match
 Syntax::Keyword::MultiSub
 Syntax::Keyword::PhaserExpression
 Syntax::Keyword::Try
+Syntax::Operator::Divides
+Syntax::Operator::Equ
+Syntax::Operator::ExistsOr
+Syntax::Operator::Identical
 Syntax::Operator::In
 Syntax::Operator::Is
+Syntax::Operator::Zip
 Task::Weaken
 Term::Table
 Test2::Plugin::NoWarnings
