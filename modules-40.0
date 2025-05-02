@@ -151,6 +151,10 @@ Object::Pad::FieldAttr::Isa
 Object::Pad::FieldAttr::LazyInit
 Object::Pad::FieldAttr::Trigger
 Object::Pad::Keyword::Accessor
+Object::Pad::LexicalMethods
+Object::Pad::Operator::Of
+Object::Pad::SlotAttr::Final
+Object::Pad::SlotAttr::Trigger
 ORLite
 Package::Stash
 Package::Stash::XS
