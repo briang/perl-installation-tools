@@ -197,7 +197,12 @@ Sub::Identify
 Sub::Install
 Sub::Quote
 Sub::Uplevel
+Syntax::Keyword::Defer
+Syntax::Keyword::Dynamically
+Syntax::Keyword::Inplace
 Syntax::Keyword::Match
+Syntax::Keyword::MultiSub
+Syntax::Keyword::PhaserExpression
 Syntax::Keyword::Try
 Syntax::Operator::In
 Syntax::Operator::Is
