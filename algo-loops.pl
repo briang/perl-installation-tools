@@ -2,12 +2,12 @@
 
 #:TAGS:
 
-use 5.030;
+use 5.040;
+use feature 'try';
 
 use strict;  use warnings;  use autodie qw/:all/;
 use experimental qw(signatures);
 
-# use Capture::Tiny;
 use Data::Dump;
 # use List::AllUtils;
 # use Try::Tiny;
@@ -104,6 +104,7 @@ sub main(@cli_args) {
     my $all_start_time = time;
     my $perl_vname     = vname_from($spec_or_tarball);
 
+    my @failures;
     for my $perm (@perms) {
         my @terms = @$perm;
 
@@ -121,14 +122,22 @@ sub main(@cli_args) {
         say "[$job/$number_of_jobs -- $command]";
         my $job_start_time = time;
 
-        run_job($command)
-          unless -d "$PERLBREW_PERLS/$as";
+        if ( -d "$PERLBREW_PERLS/$as" || run_job_succeeded($command) ) { ; }
+        else {
+            push @failures, $as;
+            say "[FAILED]"
+        }
 
         printf "@%s job_time = %s;  total_time = %s\n\n",
             time_now(),
             map { minutes_seconds(time() - $_) } $job_start_time, $all_start_time;
 
         $job += 1;
+    }
+
+    if (@failures) {
+        printf "%d jobs failed:\n", scalar @failures;
+        printf "  %s\n", $_ for sort @failures;
     }
 
     cleanup($perl_vname)
@@ -142,10 +151,14 @@ sub time_now() {
     return sprintf "%02d:%02d", map { $lt->$_ } qw'hour minute';
 }
 
-sub run_job($command) {
-    return if $option->simulate;
-    my ( $output, $exit ) = capture_merged { system($command) };
-    die "$output\n" if $exit != 0;
+sub run_job_succeeded($command) {
+    return 1 if $option->simulate;
+    try {
+        my ( $output, $status ) = capture_merged { system $command };
+        return $status == 0
+    } catch ($e) {}
+
+    die "how did we get here?";
 }
 
 sub vname_from($tarball) {
