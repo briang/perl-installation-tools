@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# set -o errexit  # exit on error
+set -o pipefail # trap pipe fails
+set -o nounset  # trap unset vars
+
+function __f {
+    DISTS="$PERLBREW_ROOT/dists/*"
+    INSTALL_CMD="./algo-loops.pl quick -j6"
+
+    for D in $DISTS ; do
+        # echo $D
+        if [[ ! -f $D ]] ; then
+            echo "$D isn't a file"
+            break
+        fi
+        $INSTALL_CMD $D
+    done
+}
+
+__f ; unset -f __f
