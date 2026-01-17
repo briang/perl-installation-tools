@@ -158,7 +158,7 @@ sub run_job_succeeded($command) {
         return $status == 0
     } catch ($e) {}
 
-    die "how did we get here?";
+    return 0; # die "how did we get here?";
 }
 
 sub vname_from($tarball) {
