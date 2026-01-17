@@ -10,11 +10,11 @@ function __f {
 
     for D in $DISTS ; do
         # echo $D
-        if [[ ! -f $D ]] ; then
+        if [[ -f $D ]] ; then
+            $INSTALL_CMD $D
+        else
             echo "$D isn't a file"
-            break
         fi
-        $INSTALL_CMD $D
     done
 }
 
