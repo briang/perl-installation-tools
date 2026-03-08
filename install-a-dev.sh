@@ -8,9 +8,10 @@ function __f {
     local F P
     F=$(realpath "$1")
     P=${F/*\//} # remove path
-    P=${P/perl-5./dev-} # replace "perl..." prefix with "dev-"
     P=${P/.tar.*/} # remove suffix
-    cmd="perlbrew install $F --as $P --thread --ld -j 4 &"
+    L="tail -f $PERLBREW_ROOT/build.$P.log" # log
+    P=${P/perl-5./dev-} # replace "perl..." prefix with "dev-"
+    cmd="perlbrew install $F --as $P --thread --ld -j $(nproc) &"
 
     echo 'The command I would of run, if I were so inclined...'
     echo "    $cmd"
