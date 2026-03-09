@@ -46,12 +46,13 @@ my %CONFIG_SET_FOR = (
     vquick => [ [] ], # no options at all
 );
 
+my $NPROC = 0 + qx(nproc);
 $Getopt::Long::autoabbrev = 0;  # don't allow abbrevs of --some-long-option
 my ($option, $help) = describe_options(
     "$APP  %o  conf-set  ( perl-version | path-to-tarball ) +",
 
     [ 'clean'      => 'delete all build artefacts in `perls/` and `build/`' ],
-    [ 'jobs|j=i'   => 'the number of jobs `make` will run simultaneously (default: 5)', { default => 5 } ],
+    [ 'jobs|j=i'   => "the number of jobs \`make\` will run simultaneously (default: $NPROC)", { default => $NPROC } ],
     [ 'man|m'      => 'also install man pages (default: don\'t)' ],
     [ 'prefix|p=s' => 'add the given prefix to each installation' ],
     [ 'simulate|s' => 'do not install anything' ],
