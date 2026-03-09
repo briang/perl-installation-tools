@@ -30,9 +30,12 @@ CPAN
 CPAN::Changes
 CPAN::DistnameInfo
 Cpanel::JSON::XS
+CPAN::Meta
 CPAN::Meta::Check
+CPAN::Meta::Requirements
 CPAN::Meta::YAML
 CPAN::Requirements::Dynamic
+CPAN::Uploader
 Crypt::Random::Seed
 Crypt::Random::TESHA2
 curry
@@ -49,6 +52,7 @@ DateTime::TimeZone
 DateTime::TimeZone::Alias
 DateTime::TimeZone::Catalog::Extend
 DBD::SQLite
+DB_File
 DBI
 Devel::CheckBin
 Devel::Cover
@@ -84,7 +88,9 @@ File::Remove
 File::ShareDir
 File::ShareDir::Install
 File::Slurp
+File::Temp
 File::Which
+Filter::Util::Call
 Future
 Future::AsyncAwait
 GD
@@ -197,11 +203,13 @@ Readonly
 Ref::Util
 Ref::Util::XS
 Regexp::Common
+Release::Checklist
 Role::Tiny
 Safe::Isa
 Scope::Guard
 Set::Object
 Set::Tiny
+Socket
 Sort::Versions
 Specio
 Statistics::Descriptive
@@ -229,6 +237,7 @@ Syntax::Operator::In
 Syntax::Operator::Is
 Syntax::Operator::Zip
 Task::Weaken
+Term::ReadKey
 Term::Table
 Test2::Plugin::NoWarnings
 Test2::Suite
@@ -257,6 +266,7 @@ Test::Time
 Test::Warn
 Test::Warnings
 Test::Without::Module
+Text::Balanced
 Text::CSV_XS
 Text::Diff
 Text::Glob
