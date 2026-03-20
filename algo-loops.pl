@@ -105,6 +105,8 @@ sub main(@cli_args) {
     my $all_start_time = time;
     my $perl_vname     = vname_from($spec_or_tarball);
 
+    say "Using ", $option->jobs, " make jobs";
+
     my @failures;
     for my $perm (@perms) {
         my @terms = @$perm;
