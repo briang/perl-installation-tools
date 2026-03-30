@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [[ $# != 1 ]] ; then
+    echo "usage: fetch-a-perl 42.2 # fetches perl-5.42.2.tar.gz from www.cpan.org"
+    exit 1
+fi
+
+url="https://www.cpan.org/src/5.0/perl-5.$1.tar.gz"
+echo "fetching $url"
+wget "$url"
