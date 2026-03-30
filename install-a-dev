@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -o errexit  # exit on error
+set -o pipefail # trap pipe fails
+set -o nounset  # trap unset vars
+
+function __f {
+    local F P L
+    F=$(realpath "$1")
+    P=${F/*\//} # remove path
+    P=${P/.tar.*/} # remove suffix
+    P=${P/perl-5./dev-} # replace "perl..." prefix with "dev-"
+    cmd="perlbrew install $F --as $P --thread --ld -j $(nproc) &"
+
+    echo "Running: $cmd"
+
+    echo -ne "\nProceed? ";
+    read -r ans; # shuddup shellcheck!
+    [[ $ans == 'y' ]] && $cmd
+}
+
+if [[ $# == 0 ]]; then
+    echo "usage: $0 <path/to/perl-tarball>"
+    exit 1
+fi
+
+__f "$1"
+
+unset -f __f
