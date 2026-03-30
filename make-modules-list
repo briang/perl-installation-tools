@@ -1,0 +1,51 @@
+#!/bin/env perl
+
+#!/usr/bin/env perl
+
+#:TAGS:
+
+use v5.36;
+use autodie ':all';
+use utf8;
+use open ':std', ':encoding(UTF-8)';
+
+use experimental qw( builtin defer for_list isa re_strict try );
+
+use builtin qw( ceil floor indexed trim );
+# true false is_bool weaken unweaken is_weak blessed
+# refaddr reftype created_as_string created_as_number
+
+use Benchmark;
+use Capture::Tiny;
+use Carp;
+use Object::Pad;
+use Syntax::Keyword::Match;
+use Time::HiRes 'time';
+use Time::Piece;
+
+use Data::Dump; # FIXME
+################################################################################
+use List::AllUtils 'uniq';
+
+my $PERL5_VERSION = $^V =~ s/v5\.//r;
+
+my %CHANGES = (
+    'cpan::outdated' => 'App::cpanoutdated',
+);
+
+chomp( my @previous_modules = qx(cat modules-??.?) );
+chomp( my @current_modules  = qx(perlbrew list-modules) );
+
+my @uniq_all_modules =
+    uniq
+    sort { lc $a cmp lc $b }
+    map  {
+        $_ = $CHANGES{$_}
+            if exists $CHANGES{$_};
+        $_
+        }
+    @previous_modules, @current_modules;
+
+open my $F, ">", '/tmp/m';
+say {$F} $_ for @uniq_all_modules;
+close $F;
